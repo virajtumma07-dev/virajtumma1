@@ -682,16 +682,13 @@ document.getElementById('testiNext').addEventListener('click', () => showTesti(t
 dotsEl.addEventListener('click', (e) => { if(e.target.dataset.i) showTesti(+e.target.dataset.i); });
 let testiTimer = setInterval(() => showTesti(testiIndex + 1), 6000);
 
-// Contact form
-const form = document.getElementById('contactForm');
-const formMsg = document.getElementById('formMsg');
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  if(!form.checkValidity()){ return; }
-  formMsg.classList.add('show');
-  form.reset();
-  setTimeout(() => formMsg.classList.remove('show'), 5000);
-});
+<form action="https://api.web3forms.com/submit" method="POST">
+  <input type="hidden" name="access_key" value="3d64ecad-5dbd-4e39-b06b-0b8824ab9fc8">
+  <input type="text" name="name" required>
+  <input type="email" name="email" required>
+  <textarea name="message" required></textarea>
+  <button type="submit">Submit</button>
+</form>
 </script>
 </body>
 </html>
