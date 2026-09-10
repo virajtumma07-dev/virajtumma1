@@ -682,6 +682,17 @@ document.getElementById('testiNext').addEventListener('click', () => showTesti(t
 dotsEl.addEventListener('click', (e) => { if(e.target.dataset.i) showTesti(+e.target.dataset.i); });
 let testiTimer = setInterval(() => showTesti(testiIndex + 1), 6000);
 
+  // Contact form
+const form = document.getElementById('contactForm');
+const formMsg = document.getElementById('formMsg');
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if(!form.checkValidity()){ return; }
+  formMsg.classList.add('show');
+  form.reset();
+  setTimeout(() => formMsg.classList.remove('show'), 5000);
+});
+
 
 </script>
 </body>
