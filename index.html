@@ -683,44 +683,53 @@ dotsEl.addEventListener('click', (e) => { if(e.target.dataset.i) showTesti(+e.ta
 let testiTimer = setInterval(() => showTesti(testiIndex + 1), 6000);
 
   // Contact form
-const form = document.getElementById('form');
-const submitBtn = form.querySelector('button[type="submit"]');
+  // Contact form (Web3Forms)
+const form = document.getElementById('contactForm');
+const formMsg = document.getElementById('formMsg');
+const formMsgDefaultText = formMsg.textContent;
 
 form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  if (!form.checkValidity()) return;
 
-    const formData = new FormData(form);
-    formData.append("access_key", "3d64ecad-5dbd-4e39-b06b-0b8824ab9fc8");
+  const submitBtn = form.querySelector('.submit-btn');
+  const originalBtnText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending...';
 
-    const originalText = submitBtn.textContent;
+  const formData = new FormData(form);
+  formData.append('access_key', '3d64ecad-5dbd-4e39-b06b-0b8824ab9fc8');
+  formData.append('subject', 'New message from your portfolio site');
+  formData.append('from_name', 'Viraj.Tumma portfolio contact form');
 
-    submitBtn.textContent = "Sending...";
-    submitBtn.disabled = true;
+  try {
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: formData
+    });
+    const result = await res.json();
 
-    try {
-        const response = await fetch("https://api.web3forms.com/submit", {
-            method: "POST",
-            body: formData
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            alert("Success! Your message has been sent.");
-            form.reset();
-        } else {
-            alert("Error: " + data.message);
-        }
-
-    } catch (error) {
-        alert("Something went wrong. Please try again.");
-    } finally {
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
+    if (result.success) {
+      formMsg.textContent = formMsgDefaultText;
+      formMsg.style.color = '';
+      formMsg.classList.add('show');
+      form.reset();
+    } else {
+      formMsg.textContent = "Something went wrong — please email me directly at virajtumma07@gmail.com.";
+      formMsg.style.color = '#E08A6B';
+      formMsg.classList.add('show');
     }
+  } catch (err) {
+    formMsg.textContent = "Network error — please email me directly at virajtumma07@gmail.com.";
+    formMsg.style.color = '#E08A6B';
+    formMsg.classList.add('show');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalBtnText;
+    setTimeout(() => formMsg.classList.remove('show'), 6000);
+  }
 });
-
-
 </script>
 </body>
 </html>
